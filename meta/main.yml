@@ -1,6 +1,7 @@
 galaxy_info:
-  author: Simon Guigui
-
+  author: 'Simon Guigui'
+  description: 'An Ansible role automating the deployment of Cuckoo Sandbox, a malware analysis system'
+  
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
   # issue_tracker_url: http://example.com/issue/tracker
