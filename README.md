@@ -7,7 +7,7 @@ Current limitations:
 
 - Only libvirt/KVM is supported right now
 - Probably only works on Ubuntu 16.04
-- You still need to manually write most of your <machinery>.conf
+- You still need to manually write most of your \<machinery\>.conf
 
 
 Requirements
