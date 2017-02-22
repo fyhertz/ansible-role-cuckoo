@@ -15,9 +15,6 @@ cuckoo_interface: 'virbr0'
 # Path where cuckoo will be installed on nodes
 cuckoo_root: "/home/cuckoo"
 
-# Usually vboxnet0 for virtualbox and virbr0 for libvirt
-cuckoo_virtual_interface: "virbr0"
-
 cuckoo_apt_requirements:
   - python
   - python-pip
