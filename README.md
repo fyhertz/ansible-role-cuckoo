@@ -40,6 +40,16 @@ Example Playbook
          - { role: fyhertz.cuckoo,  cuckoo_install_web_interface: True}
 ```
 
+Running the test.yml playbook
+-----------------------------
+
+This playbook was written to test the role inside a [Vagrant](https://www.vagrantup.com/) box.
+
+```
+cd ansible-role-cuckoo/tests
+vagrant up --provider libvirt
+ansible-playbook -i inventory test.yml
+```
 
 License
 -------
