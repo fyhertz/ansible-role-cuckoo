@@ -207,9 +207,16 @@ galaxy_info:
   #  - Any
 
   galaxy_tags:
-    - cuckoo-sandbox
-    - malware-analysis
-    - 
+    - deployment
+    - virtualization
+    - deploy
+    - cuckoo
+    - malware
+    - install
+    - sandbox
+    - vm
+    - kvm
+    
     # List tags for your role here, one per line. A tag is
     # a keyword that describes and categorizes the role.
     # Users find roles by searching for tags. Be sure to
