@@ -1,0 +1,62 @@
+---
+
+cuckoo_version: "2.0-rc2"
+
+cuckoo_machinery: 'kvm'
+
+cuckoo_install_yara: True
+
+cuckoo_install_volatility: True
+
+cuckoo_install_web_interface: True
+
+cuckoo_interface: 'virbr0'
+
+# Path where cuckoo will be installed on nodes
+cuckoo_root: "/home/cuckoo"
+
+# Usually vboxnet0 for virtualbox and virbr0 for libvirt
+cuckoo_virtual_interface: "virbr0"
+
+cuckoo_apt_requirements:
+  - python
+  - python-pip
+  - python-dev
+  - libffi-dev
+  - libssl-dev
+  - wget
+  - mongodb
+  - build-essential
+  - libxml2-dev 
+  - libxslt-dev
+  - libjpeg-dev
+
+yara_version: "3.3.0"
+yara_apt_requirements:
+  - libpcre3
+  - libpcre3-dev
+  - libtool
+  - automake
+  - autoconf
+  - python-dev
+  - libssl-dev
+  - libjansson-dev
+  - libmagic-dev
+  - build-essential
+
+volatility_version: "2.5"
+
+volatility_pip_requirements:
+  - distorm3
+
+
+# pip_requirements: 
+#   - django-ratelimit
+#   - dnspython
+#   - bottle
+#   - pydeep
+#   - pygal
+#   - vmcloak
+#   - distorm3
+#   - gunicorn
+  

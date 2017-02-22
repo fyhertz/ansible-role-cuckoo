@@ -1,0 +1,49 @@
+---
+
+# Install libvirt
+- include_role:
+    name: debops.libvirt
+  vars:
+
+    libvirt__packages_map:
+      'xenial':  [ 'libvirt-bin', 'qemu-kvm', 'qemu-utils' ]
+    
+    libvirt__networks:
+      - '{{ libvirt__networks_default }}'
+    libvirt__networks_default:
+      - name: 'default'
+        type: 'dnsmasq'
+        bridge: 'virbr0'
+        addresses: [ '192.168.122.1/24' ]
+        dhcp_range: [ '2', '-2' ]
+        state: 'active'
+        
+      - name: 'external'
+        type: 'bridge'
+        bridge: 'br0'
+        interface_present: 'br0'
+        state: 'active'
+
+    libvirt__pools_default:
+      - name: 'default'
+        type: 'dir'
+        path: '/images'
+    
+  become: yes
+  become_method: sudo
+
+- name: Add cuckoo user to libvirtd group
+  become: True
+  user: name='cuckoo'
+        groups=libvirtd
+        append=yes
+
+- name: Set network interface used by tcpdump
+  become: True
+  ini_file:
+    dest: '{{ cuckoo_root }}/conf/kvm.conf'
+    section: 'kvm'
+    option: 'interface'
+    value: '{{ cuckoo_interface }}'
+  notify: restart cuckoo
+    

@@ -1,0 +1,51 @@
+---
+
+- name: Install requirements from apt
+  become: yes
+  package:
+    name: "{{ cuckoo_apt_requirements }}"
+    state: latest
+
+- name: Create cuckoo group
+  become: yes
+  group: name=cuckoo
+
+- name: Create cuckoo user
+  become: yes
+  user: name=cuckoo groups=cuckoo,sudo shell=/bin/bash password=$6$fd3Ei22cWadFLS1U$uFxUvp24bSDfITbXP5EeSav4KmB.xHAxypwtIdmvb3A.2anQfsRFHmgNagINMMJmyE29FWvcvq7fgsUByJIoK/
+
+- name: Sudo group with no passwd
+  become: yes
+  lineinfile: "dest=/etc/sudoers state=present regexp='^%sudo' line='%sudo ALL=(ALL) NOPASSWD: ALL'"
+
+- name: Download cuckoo
+  become: yes
+  get_url: url=https://downloads.cuckoosandbox.org/{{ cuckoo_version }}/cuckoo-{{ cuckoo_version }}.tar.gz dest=/tmp mode=0440
+
+- name: Extract cuckoo
+  become: yes
+  unarchive: src="/tmp/cuckoo-{{ cuckoo_version }}.tar.gz" dest=/home/ copy=no
+
+- name: Install requirements from pip
+  become: yes
+  pip: requirements="{{ cuckoo_root }}/requirements.txt"
+  
+#- name: Install additional python modules
+#  pip: name={{ item }} state=present
+#  with_items: pip_requirements
+#  become: yes
+#  become_method: sudo
+
+- name: Setcap tcptump permissions
+  become: yes
+  command: setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
+
+- name: Give proper permissions
+  become: yes
+  file: path={{ cuckoo_root }} state=directory recurse=yes owner=cuckoo group=cuckoo
+
+- name: Install Cuckoo systemd service
+  become: yes
+  become_method: sudo
+  template: src=cuckoo.service.j2 dest=/etc/systemd/system/cuckoo.service owner=root group=root mode=0644
+  notify: restart cuckoo

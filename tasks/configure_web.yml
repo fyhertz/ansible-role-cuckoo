@@ -1,0 +1,23 @@
+---
+
+
+- name: Enable Mongo database (Required for the web interface)
+  become: True
+  ini_file:
+    dest: '{{ cuckoo_root }}/conf/reporting.conf'
+    section: 'mongodb'
+    option: 'enabled'
+    value: 'yes'
+  notify: restart cuckoo
+
+- name: Install Cuckoo Sandbox API NGINX Configuration
+  become: yes
+  become_method: sudo
+  template: src=nginx.cuckoo-web.conf.j2 dest=/etc/nginx/conf.d/cuckoo-api.conf owner=root group=root mode=0644
+  notify: restart nginx
+  
+- name: Install Cuckoo Sandbox Web Service
+  become: yes
+  become_method: sudo
+  template: src=cuckoo-web.service.j2 dest=/etc/systemd/system/cuckoo-web.service owner=root group=root mode=0644
+  notify: restart cuckoo-web

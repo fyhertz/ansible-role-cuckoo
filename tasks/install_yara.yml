@@ -1,0 +1,62 @@
+---
+
+- name: Install yara requirements from apt
+  become: yes
+  become_method: sudo
+  package:
+    name: "{{ yara_apt_requirements }}"
+    state: latest
+
+  
+- name: Download yara
+  become: yes
+  become_method: sudo
+  get_url: url=https://github.com/plusvic/yara/archive/v{{ yara_version }}.tar.gz dest=/tmp/ mode=0440
+
+- name: Extract yara
+  become: yes
+  become_method: sudo
+  unarchive: src="/tmp/yara-{{ yara_version }}.tar.gz" dest=/tmp copy=no
+
+- name: yara Bootstrap
+  become: yes
+  become_method: sudo
+  command: ./bootstrap.sh
+  args:
+    chdir: /tmp/yara-{{ yara_version }}
+
+- name: yara Configure
+  become: yes
+  become_method: sudo
+  command: ./configure --enable-cuckoo --enable-magic
+  args:
+    chdir: /tmp/yara-{{ yara_version }}
+
+- name: yara Make install
+  become: yes
+  become_method: sudo
+  command: make install
+  args:
+    chdir: /tmp/yara-{{ yara_version }}
+
+- name: Build yara python module
+  become: yes
+  become_method: sudo
+  command: python setup.py build install
+  args:
+    chdir: /tmp/yara-{{ yara_version }}/yara-python
+
+- name: yara ldconfig
+  become: yes
+  become_method: sudo
+  command: ldconfig
+  args:
+    chdir: /tmp/yara-{{ yara_version }}/yara-python
+
+#- name: Cleanup yara installation files
+#  become: yes
+#  become_method: sudo
+#  file: path=/tmp/{{ item }} state=absent
+#  with_items:
+#    - /tmp/yara-{{ yara_version }}
+#    - /tmp/yara-{{ yara_version }}.tar.gz

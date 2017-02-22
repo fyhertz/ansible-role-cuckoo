@@ -1,0 +1,28 @@
+---
+
+- name: Install requirements from pip
+  become: yes
+  become_method: sudo
+  pip: name="{{ volatility_pip_requirements }}"
+
+- name: download volatility
+  become: yes
+  become_method: sudo
+  get_url: url=https://github.com/volatilityfoundation/volatility/archive/{{ volatility_version }}.tar.gz  dest=/tmp/ mode=0440
+
+- name: Extract volatility
+  become: yes
+  become_method: sudo
+  unarchive: src="/tmp/volatility-{{ volatility_version }}.tar.gz" dest=/tmp copy=no
+
+- name: Install volatility
+  become: yes
+  become_method: sudo
+  command: python setup.py install
+  args:
+    chdir: /tmp/volatility-{{ volatility_version }}
+
+#- name: Cleanup volatility installation files
+#  become: yes
+#  become_method: sudo
+#  command: rm -rf /tmp/volatility-{{ volatility_version }} && rm -rf /tmp/volatility-{{ volatility_version }}.tar.gz

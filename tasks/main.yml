@@ -1,0 +1,46 @@
+---
+
+# Install dependencies, download cuckoo, set up user, group, and permissions
+- include: install_cuckoo.yml
+  tags: role::cuckoo::install
+  
+# Download, build and install yara from sources
+- include: install_yara.yml
+  when: cuckoo_install_yara
+  tags: ['role::cuckoo::install','role::cuckoo::yara']
+  
+# Download and install volatility
+- include: install_volatility.yml
+  when: cuckoo_install_volatility
+  tags: ['role::cuckoo::install','role::cuckoo::volatility']
+
+# Install nginx
+- include_role:
+    name: geerlingguy.nginx
+  vars:
+    nginx_remove_default_vhost: true
+  become: yes
+  become_method: sudo
+  tags: ['role::cuckoo::install']
+
+# Configure cuckoo
+- include: configure_cuckoo.yml
+  tags: ['role::cuckoo::install','role::cuckoo::configure']
+
+# Enable cuckoo web API through nginx web server
+- include: configure_api.yml
+  tags: ['role::cuckoo::install','role::cuckoo::configure']
+
+# Enable cuckoo web interface 
+- include: configure_web.yml
+  when: cuckoo_install_web_interface
+  tags: ['role::cuckoo::install','role::cuckoo::configure']
+  
+# Update the binaries used for Windows analysis
+- include: update_binaries.yml
+  tags: ['role::cuckoo::install','role::cuckoo::update_binaries']
+
+# If machinary==kvm, generate kvm.conf and start cuckoo
+- include: kvm.yml
+  when: cuckoo_machinery=="kvm"
+  tags: ['role::cuckoo::install','role::cuckoo::configure', 'role::cuckoo::kvm']

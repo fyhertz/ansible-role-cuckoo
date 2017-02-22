@@ -1,0 +1,33 @@
+---
+
+- name: Set cuckoo machinery
+  become: True
+  ini_file:
+    dest: '{{ cuckoo_root }}/conf/cuckoo.conf'
+    section: 'cuckoo'
+    option: 'machinery'
+    value: '{{ cuckoo_machinery }}'
+  notify: restart cuckoo
+
+
+# Get ip address of the interface specified in the variable cuckoo_interface
+# This ip will be used for the resultserver ip field in cuckoo.conf
+- name: Get ip address of the interface specified in the variable cuckoo_interface
+  shell: ip -f inet -o addr show {{ cuckoo_interface }} |cut -d ' ' -f 7 | cut -d/ -f 1
+  register: tmp
+
+- set_fact: 
+    cuckoo_interface_ip: '{{ tmp.stdout }}'
+  
+- debug:
+    var: cuckoo_interface_ip
+
+- name: Set resultserver ip field in cuckoo.conf
+  become: True
+  ini_file:
+    dest: '{{ cuckoo_root }}/conf/cuckoo.conf'
+    section: 'resultserver'
+    option: 'ip'
+    value: '{{ cuckoo_interface_ip }}'
+  notify: restart cuckoo
+  

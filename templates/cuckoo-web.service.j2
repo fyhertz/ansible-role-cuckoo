@@ -1,0 +1,12 @@
+[Unit]
+Description=Cuckoo web service
+After=network.target mysql.service mongod.service
+
+[Service]
+User=cuckoo
+Group=cuckoo
+ExecStart=/usr/bin/python2.7 manage.py runserver 127.0.0.1:8000
+WorkingDirectory={{ cuckoo_root }}/web
+
+[Install]
+WantedBy=multi-user.target
