@@ -29,7 +29,7 @@ Dependencies
 - [geerlingguy.mysql](https://github.com/geerlingguy/ansible-role-mysql) If you enable cuckoo distributed
 
 ```
-$ ansible-galaxy install geerlingguy.nginx debops.libvirt
+$ ansible-galaxy install geerlingguy.nginx geerlingguy.mysql debops.libvirt
 ```
 
 Example Playbook
