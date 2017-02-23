@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/simon/Work/CLUSTER/ansible-role-cuckoo/tests/cuckoo0","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}

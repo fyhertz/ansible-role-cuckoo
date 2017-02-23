@@ -4,13 +4,16 @@ cuckoo_version: "2.0-rc2"
 
 cuckoo_machinery: 'kvm'
 
-cuckoo_install_yara: True
-
-cuckoo_install_volatility: True
-
-cuckoo_install_web_interface: True
-
 cuckoo_interface: 'virbr0'
+
+cuckoo_enable_yara: True
+
+cuckoo_enable_volatility: True
+
+cuckoo_enable_web_interface: True
+
+# Not tested
+cuckoo_enable_distributed: False
 
 # Path where cuckoo will be installed on nodes
 cuckoo_root: "/home/cuckoo"
@@ -46,7 +49,11 @@ volatility_version: "2.5"
 volatility_pip_requirements:
   - distorm3
 
-
+cuckoo_distributed_pip_requirements:
+  - flask
+  - flask-sqlalchemy
+  - requests
+  
 # pip_requirements: 
 #   - django-ratelimit
 #   - dnspython

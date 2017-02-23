@@ -6,12 +6,12 @@
   
 # Download, build and install yara from sources
 - include: install_yara.yml
-  when: cuckoo_install_yara
+  when: cuckoo_enable_yara
   tags: ['role::cuckoo::install','role::cuckoo::yara']
   
 # Download and install volatility
 - include: install_volatility.yml
-  when: cuckoo_install_volatility
+  when: cuckoo_enable_volatility
   tags: ['role::cuckoo::install','role::cuckoo::volatility']
 
 # Install nginx
@@ -33,14 +33,21 @@
 
 # Enable cuckoo web interface 
 - include: configure_web.yml
-  when: cuckoo_install_web_interface
+  when: cuckoo_enable_web_interface
   tags: ['role::cuckoo::install','role::cuckoo::configure']
   
 # Update the binaries used for Windows analysis
 - include: update_binaries.yml
   tags: ['role::cuckoo::install','role::cuckoo::update_binaries']
 
+
+# Makes the necessary changes in cuckoo nodes for cuckoo distributed
+- include: configure_cuckoo_ditributed.yml
+  when: cuckoo_enable_distributed
+  tags: ['role::cuckoo::install','role::cuckoo::configure', 'role::cuckoo::distributed']
+
+  
 # If machinary==kvm, generate kvm.conf and start cuckoo
-- include: kvm.yml
+- include: configure_kvm.yml
   when: cuckoo_machinery=="kvm"
   tags: ['role::cuckoo::install','role::cuckoo::configure', 'role::cuckoo::kvm']
