@@ -60,6 +60,6 @@ BSD
 Author Information
 ------------------
 
-Simon Guigui
-Hugo Genesse
-Based on [this](https://github.com/breachintelligence/ansible-cuckoo)
+- Simon Guigui
+- Hugo Genesse
+- Based on [this](https://github.com/breachintelligence/ansible-cuckoo)
