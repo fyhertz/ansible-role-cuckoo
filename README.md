@@ -60,4 +60,6 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Simon Guigui
+Hugo Genesse
+Based on [this](https://github.com/breachintelligence/ansible-cuckoo)
