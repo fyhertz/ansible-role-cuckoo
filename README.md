@@ -38,7 +38,7 @@ Example Playbook
 ```
     - hosts: servers
       roles:
-         - { role: fyhertz.cuckoo,  cuckoo_install_web_interface: True}
+         - { role: fyhertz.cuckoo,  cuckoo_enable_web_interface: True}
 ```
 
 Running the test.yml playbook
