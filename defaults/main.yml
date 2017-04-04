@@ -48,6 +48,7 @@ volatility_version: "2.5"
 
 volatility_pip_requirements:
   - distorm3
+  - pycrypto
 
 cuckoo_distributed_pip_requirements:
   - flask
