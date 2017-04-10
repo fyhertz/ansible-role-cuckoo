@@ -11,6 +11,11 @@
   become: yes
   become_method: sudo
 
+# Wait for mysql to start
+- wait_for:
+    port: 3306
+    delay: 10
+  
 - name: Inform cuckoo to use mysql
   become: True
   ini_file:
