@@ -7,6 +7,7 @@
 
     libvirt__packages_map:
       'xenial':  [ 'libvirt-bin', 'qemu-kvm', 'qemu-utils' ]
+      'yakkety': [ 'libvirt-bin', 'qemu-kvm', 'qemu-utils' ]
     
     libvirt__networks:
       - '{{ libvirt__networks_default }}'
