@@ -15,4 +15,9 @@ Vagrant.configure("2") do |config|
     libvirt.storage_pool_name = "default"
     libvirt.memory = "1024"
   end
+
+  # Install python 2.7
+  config.vm.provision "shell", inline: "sudo apt-get update"
+  config.vm.provision "shell", inline: "sudo apt-get install -y  python2.7"
+
 end

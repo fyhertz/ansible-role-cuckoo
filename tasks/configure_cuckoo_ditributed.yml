@@ -10,11 +10,6 @@
       - name: cuckoo
   become: yes
   become_method: sudo
-
-- name: Wait for mysql to start
-  wait_for:
-    port: 3306
-    delay: 10
   
 - name: Inform cuckoo to use mysql
   become: True

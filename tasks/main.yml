@@ -36,12 +36,10 @@
 - include: update_binaries.yml
   tags: ['role::cuckoo::install','role::cuckoo::update_binaries']
 
-
 # Makes the necessary changes in cuckoo nodes for cuckoo distributed
 - include: configure_cuckoo_ditributed.yml
   when: cuckoo_enable_distributed
   tags: ['role::cuckoo::install','role::cuckoo::configure', 'role::cuckoo::distributed']
-
   
 # If machinary==kvm, generate kvm.conf and start cuckoo
 - include: configure_kvm.yml

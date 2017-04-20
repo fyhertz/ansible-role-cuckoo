@@ -1,14 +1,16 @@
----
+---    
 
-# Install libvirt
 - include_role:
-    name: debops.libvirt
+    name: fyhertz.libvirtd
+  become: yes
+  become_method: sudo
+
+
+# Configure libvirt
+- include_role:
+    name: fyhertz.libvirt
   vars:
 
-    libvirt__packages_map:
-      'xenial':  [ 'libvirt-bin', 'qemu-kvm', 'qemu-utils' ]
-      'yakkety': [ 'libvirt-bin', 'qemu-kvm', 'qemu-utils' ]
-    
     libvirt__networks:
       - '{{ libvirt__networks_default }}'
     libvirt__networks_default:
@@ -28,15 +30,19 @@
     libvirt__pools_default:
       - name: 'default'
         type: 'dir'
-        path: '/images'
-    
+        path: '/var/lib/libvirt/images'
+
   become: yes
   become_method: sudo
-
+        
+- name: Get list of groups
+  command: cut -d ":" -f 1 /etc/group
+  register: cuckoo_register_groups
+  
 - name: Add cuckoo user to libvirtd group
   become: True
   user: name='cuckoo'
-        groups=libvirtd
+        groups={{ cuckoo_register_groups.stdout.split('\n') | intersect(cuckoo_libvirt_group) | join(',') }}
         append=yes
 
 - name: Set network interface used by tcpdump

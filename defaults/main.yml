@@ -30,7 +30,8 @@ cuckoo_apt_requirements:
   - libxml2-dev 
   - libxslt-dev
   - libjpeg-dev
-
+  - tcpdump
+  
 yara_version: "3.3.0"
 yara_apt_requirements:
   - libpcre3
@@ -64,4 +65,8 @@ cuckoo_distributed_pip_requirements:
 #   - vmcloak
 #   - distorm3
 #   - gunicorn
-  
+
+# We need to add cuckoo to the libvirt group, it's name may vary depending on the OS
+cuckoo_libvirt_group:
+  - libvirt
+  - libvirtd
