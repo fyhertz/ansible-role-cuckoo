@@ -13,7 +13,7 @@
 - name: Install Cuckoo Sandbox API NGINX Configuration
   become: yes
   become_method: sudo
-  template: src=nginx.cuckoo-web.conf.j2 dest=/etc/nginx/conf.d/cuckoo-api.conf owner=root group=root mode=0644
+  template: src=nginx.cuckoo-web.conf.j2 dest=/etc/nginx/conf.d/cuckoo-web.conf owner=root group=root mode=0644
   notify: restart nginx
   
 - name: Install Cuckoo Sandbox Web Service
