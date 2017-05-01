@@ -24,12 +24,12 @@ TODO!
 Dependencies
 ------------
 
-- [debops.libvirt](https://github.com/debops/ansible-libvirt) If libvirt is used for your VMs
+- [fyhertz.libvirt](https://github.com/fyhertz/ansible-libvirt) and [fyhertz.libvirtd](https://github.com/fyhertz/ansible-libvirtd) If libvirt is used for your VMs
 - [geerlingguy.nginx](https://github.com/geerlingguy/ansible-role-nginx)
 - [geerlingguy.mysql](https://github.com/geerlingguy/ansible-role-mysql) If you enable cuckoo distributed
 
 ```
-$ ansible-galaxy install geerlingguy.nginx geerlingguy.mysql debops.libvirt
+$ ansible-galaxy install -r requirements.yml
 ```
 
 Example Playbook
