@@ -30,7 +30,7 @@
 # Enable cuckoo web interface 
 - include: configure_web.yml
   when: cuckoo_enable_web_interface
-  tags: ['role::cuckoo::install','role::cuckoo::configure']
+  tags: ['role::cuckoo::install','role::cuckoo::configure','role::cuckoo::web']
   
 # Update the binaries used for Windows analysis
 - include: update_binaries.yml
