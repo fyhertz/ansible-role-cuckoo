@@ -1,0 +1,10 @@
+- src: fyhertz.libvirtd
+  version: master
+  
+- src: fyhertz.libvirt
+  version: master
+
+- src: geerlingguy.nginx
+
+- src: geerlingguy.mysql
+    

@@ -1,0 +1,5 @@
+---
+
+- hosts: cuckoo1
+  roles:
+    - ../../ansible-role-cuckoo
