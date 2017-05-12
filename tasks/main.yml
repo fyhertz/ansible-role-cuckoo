@@ -2,50 +2,64 @@
 
 # Install dependencies, download cuckoo, set up user, group, and permissions
 - include: install_cuckoo.yml
-  tags: role::cuckoo::install
+  become: True
+  tags: ['role::cuckoo::install']
   
 # Download, build and install yara from sources
 - include: install_yara.yml
   when: cuckoo_enable_yara
-  tags: ['role::cuckoo::install','role::cuckoo::yara']
+  tags: ['role::cuckoo::install']
   
 # Download and install volatility
 - include: install_volatility.yml
   when: cuckoo_enable_volatility
   tags: ['role::cuckoo::install','role::cuckoo::volatility']
 
-# Install nginx
+# Install nginx if needed
 - include_role:
     name: geerlingguy.nginx
   vars:
     nginx_remove_default_vhost: true
   become: yes
   become_method: sudo
+  when: cuckoo_enable_web_interface or cuckoo_enable_api
   tags: ['role::cuckoo::install']
 
+# Install uwsgi if needed
+- name: Install uwsgi
+  become: yes
+  become_method: sudo
+  package:
+    name:
+      - uwsgi-plugin-python
+      - uwsgi
+    state: latest
+  when: cuckoo_enable_web_interface or cuckoo_enable_api
+  tags: ['role::cuckoo::install']
+  
 # Enable cuckoo web API through nginx web server
 - include: configure_api.yml
-  tags: ['role::cuckoo::install','role::cuckoo::configure']
+  tags: ['role::cuckoo::configure','role::cuckoo::api']
 
 # Enable cuckoo web interface 
 - include: configure_web.yml
   when: cuckoo_enable_web_interface
-  tags: ['role::cuckoo::install','role::cuckoo::configure','role::cuckoo::web']
+  tags: ['role::cuckoo::configure','role::cuckoo::web']
   
 # Update the binaries used for Windows analysis
-- include: update_binaries.yml
-  tags: ['role::cuckoo::install','role::cuckoo::update_binaries']
+# - include: update_binaries.yml
+#   tags: ['role::cuckoo::install','role::cuckoo::update_binaries']
 
 # Makes the necessary changes in cuckoo nodes for cuckoo distributed
-- include: configure_cuckoo_ditributed.yml
+- include: configure_ditributed.yml
   when: cuckoo_enable_distributed
-  tags: ['role::cuckoo::install','role::cuckoo::configure', 'role::cuckoo::distributed']
+  tags: ['role::cuckoo::configure', 'role::cuckoo::distributed']
   
 # If machinary==kvm, generate kvm.conf and start cuckoo
 - include: configure_kvm.yml
   when: cuckoo_machinery=="kvm"
-  tags: ['role::cuckoo::install','role::cuckoo::configure', 'role::cuckoo::kvm']
+  tags: ['role::cuckoo::configure', 'role::cuckoo::kvm']
 
 # Configure cuckoo
 - include: configure_cuckoo.yml
-  tags: ['role::cuckoo::install','role::cuckoo::configure']
+  tags: ['role::cuckoo::configure']

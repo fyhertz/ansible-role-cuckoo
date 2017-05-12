@@ -1,7 +1,5 @@
 ---
 
-cuckoo_version: "2.0-rc2"
-
 cuckoo_machinery: 'kvm'
 
 cuckoo_interface: 'virbr0'
@@ -12,15 +10,17 @@ cuckoo_enable_volatility: True
 
 cuckoo_enable_web_interface: True
 
+cuckoo_enable_api: True
+
 # Not tested
 cuckoo_enable_distributed: False
 
-# Path where cuckoo will be installed on nodes
-cuckoo_root: "/home/cuckoo"
+# Path to the CWD
+cuckoo_root: "/home/cuckoo/.cuckoo"
 
+cuckoo_version: "2.0-rc2"
 cuckoo_apt_requirements:
   - python
-  - python-pip
   - python-dev
   - libffi-dev
   - libssl-dev

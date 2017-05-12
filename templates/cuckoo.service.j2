@@ -1,11 +1,11 @@
 [Unit]
 Description=Main Cuckoo service wrapper
-After=network.target mysql.service mongod.service libvirtd.service
+After=network.target mongod.service{% if cuckoo_enable_distributed %} mysql.service{% endif %}{% if cuckoo_machinery=='kvm' %} libvirtd.service{% endif %}
 
 [Service]
 User=cuckoo
 Group=cuckoo
-ExecStart=/usr/bin/python2.7 cuckoo.py --debug
+ExecStart=/usr/local/bin/cuckoo --debug
 WorkingDirectory={{ cuckoo_root }}
 
 [Install]

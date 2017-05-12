@@ -1,53 +1,37 @@
 ---
 
-# - name: Add nginx apt key
-#   become: yes
-#   become_method: sudo
-#   apt_key:
-#     url='http://nginx.org/keys/nginx_signing.key'
-  
-# - name: Add nginx apt repo
-#   become: yes
-#   become_method: sudo
-#   apt_repository:
-#     repo="deb http://nginx.org/packages/{{ ansible_lsb.id|lower }}/ {{ ansible_lsb.codename }} nginx"
-#     update_cache=yes
+- name: Generate Cuckoo Sandbox API uWSGI configuration
+  command: /usr/local/bin/cuckoo api --uwsgi
+  become: yes
+  become_user: cuckoo
+  register: cuckoo_api_uwsgi
 
-# - name: Disable default servers
-#   become: yes
-#   become_method: sudo
-#   file:
-#     path=/etc/nginx/conf.d/{{ item.path }}
-#     state=absent
-#   with_items:
-#     - { path: 'default.conf' }
-#     - { path: 'example_ssl.conf' }
-
-
-- name: Install uwsgi
+- name: Install Cuckoo Sandbox API uWSGI configuration  
+  copy: content="{{ cuckoo_api_uwsgi.stdout }}" dest=/etc/uwsgi/apps-available/cuckoo-api.ini owner=root group=root mode=0644
   become: yes
   become_method: sudo
-  package:
-    name:
-      - uwsgi-plugin-python
-      - uwsgi
-    state: latest
-
-
-- name: Install Cuckoo Sandbox API uWSGI configuration
-  become: yes
-  become_method: sudo
-  template: src=uwsgi.cuckoo.ini.j2 dest=/etc/uwsgi/apps-available/cuckoo.ini owner=root group=root mode=0644
   notify: restart uwsgi
   
 - name: Enable Cuckoo Sandbox API uWSGI Configuration
   become: yes
   become_method: sudo
-  file: src=/etc/uwsgi/apps-available/cuckoo.ini dest=/etc/uwsgi/apps-enabled/cuckoo.ini state=link
+  file: src=/etc/uwsgi/apps-available/cuckoo-api.ini dest=/etc/uwsgi/apps-enabled/cuckoo-api.ini state=link
   notify: restart uwsgi
-  
+
+- name: Generate Cuckoo Sandbox API NGINX Configuration
+  command: /usr/local/bin/cuckoo api --nginx
+  become: yes
+  become_user: cuckoo
+  register: cuckoo_api_nginx
+
 - name: Install Cuckoo Sandbox API NGINX Configuration
+  copy: content="{{ cuckoo_api_nginx.stdout }}" dest=/etc/nginx/sites-available/cuckoo-api.conf owner=root group=root mode=0644
   become: yes
   become_method: sudo
-  template: src=nginx.cuckoo-api.conf.j2 dest=/etc/nginx/conf.d/cuckoo-api.conf owner=root group=root mode=0644
+  notify: restart nginx
+
+- name: Enable Cuckoo Sandbox API NGINX Configuration
+  become: yes
+  become_method: sudo
+  file: src=/etc/nginx/sites-available/cuckoo-api.conf dest=/etc/nginx/sites-enabled/cuckoo-api.conf state=link
   notify: restart nginx

@@ -1,6 +1,5 @@
 ---
 
-
 - name: Enable Mongo database (Required for the web interface)
   become: True
   ini_file:
@@ -10,14 +9,38 @@
     value: 'yes'
   notify: restart cuckoo
 
-- name: Install Cuckoo Sandbox API NGINX Configuration
+- name: Generate Cuckoo Sandbox web uWSGI configuration
+  command: /usr/local/bin/cuckoo web --uwsgi
+  become: yes
+  become_user: cuckoo
+  register: cuckoo_web_uwsgi
+
+- name: Install Cuckoo Sandbox web uWSGI configuration  
+  copy: content="{{ cuckoo_web_uwsgi.stdout }}" dest=/etc/uwsgi/apps-available/cuckoo-web.ini owner=root group=root mode=0644
   become: yes
   become_method: sudo
-  template: src=nginx.cuckoo-web.conf.j2 dest=/etc/nginx/conf.d/cuckoo-web.conf owner=root group=root mode=0644
-  notify: restart nginx
+  notify: restart uwsgi
   
-- name: Install Cuckoo Sandbox Web Service
+- name: Enable Cuckoo Sandbox web uWSGI Configuration
   become: yes
   become_method: sudo
-  template: src=cuckoo-web.service.j2 dest=/etc/systemd/system/cuckoo-web.service owner=root group=root mode=0644
-  notify: restart cuckoo-web
+  file: src=/etc/uwsgi/apps-available/cuckoo-web.ini dest=/etc/uwsgi/apps-enabled/cuckoo-web.ini state=link
+  notify: restart uwsgi
+
+- name: Generate Cuckoo Sandbox web NGINX Configuration
+  command: /usr/local/bin/cuckoo web --nginx
+  become: yes
+  become_user: cuckoo
+  register: cuckoo_web_nginx
+
+- name: Install Cuckoo Sandbox web NGINX Configuration
+  copy: content="{{ cuckoo_web_nginx.stdout }}" dest=/etc/nginx/sites-available/cuckoo-web.conf owner=root group=root mode=0644
+  become: yes
+  become_method: sudo
+  notify: restart nginx
+
+- name: Enable Cuckoo Sandbox web NGINX Configuration
+  become: yes
+  become_method: sudo
+  file: src=/etc/nginx/sites-available/cuckoo-web.conf dest=/etc/nginx/sites-enabled/cuckoo-web.conf state=link
+  notify: restart nginx
