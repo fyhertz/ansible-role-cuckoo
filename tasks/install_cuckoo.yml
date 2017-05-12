@@ -5,9 +5,12 @@
     name: "{{ cuckoo_apt_requirements }}"
     state: latest
 
-- easy_install:
-    name: pip
-    state: latest
+- name: Update pip
+  command: pip install --upgrade pip
+
+#- easy_install:
+#    name: pip
+#    state: latest
     
 - name: Create cuckoo group
   group: name=cuckoo
