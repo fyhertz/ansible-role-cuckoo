@@ -47,5 +47,5 @@
 
 - name: Install Cuckoo Web systemd service
   template: src=cuckoo-web.service.j2 dest=/etc/systemd/system/cuckoo-web.service owner=root group=root mode=0644
-  notify: restart cuckoo
+  notify: restart cuckoo-web
   
