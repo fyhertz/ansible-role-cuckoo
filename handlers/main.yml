@@ -14,11 +14,6 @@
   become: yes
   become_method: sudo
   service: name=cuckoo state=restarted enabled=yes
-
-- name: restart cuckoo-web
-  become: yes
-  become_method: sudo
-  service: name=cuckoo-web state=restarted enabled=yes
     
 - name: reload nginx
   become: yes
