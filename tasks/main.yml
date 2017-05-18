@@ -16,10 +16,13 @@
   tags: ['role::cuckoo::install','role::cuckoo::volatility']
 
 # Install nginx if needed
-- include_role:
-    name: geerlingguy.nginx
-  vars:
-    nginx_remove_default_vhost: true
+- block:
+    - include_role:
+        name: geerlingguy.nginx
+      vars:
+        nginx_remove_default_vhost: true
+    - user: name='www-data' groups=cuckoo append=yes
+      notify: reload nginx
   become: yes
   become_method: sudo
   when: cuckoo_enable_web_interface or cuckoo_enable_api

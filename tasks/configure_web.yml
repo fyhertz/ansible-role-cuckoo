@@ -28,7 +28,7 @@
   notify: restart uwsgi
 
 - name: Generate Cuckoo Sandbox web NGINX Configuration
-  command: /usr/local/bin/cuckoo web --nginx
+  command: /usr/local/bin/cuckoo web -H 0 --nginx
   become: yes
   become_user: cuckoo
   register: cuckoo_web_nginx

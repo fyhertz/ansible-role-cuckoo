@@ -21,6 +21,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: "sudo apt-get install -y  python2.7"
 
   # Expose cuckoo web interface if enabled
-  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 8000, host: 8000
+  config.vm.network "forwarded_port", guest: 8090, host: 8090
 
 end
