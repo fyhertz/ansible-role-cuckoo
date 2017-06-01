@@ -37,6 +37,7 @@ cuckoo_apt_requirements:
   - libxslt-dev
   - libjpeg-dev
   - tcpdump
+  - libcap2-bin
   
 yara_version: "3.3.0"
 yara_apt_requirements:
