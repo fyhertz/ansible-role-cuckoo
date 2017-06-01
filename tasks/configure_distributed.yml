@@ -1,0 +1,78 @@
+---
+
+# Set up the management node for distributed cuckoo
+- block:
+
+    # Not working :( What is wrong with delegate_facts?
+    # - name: Tell every worker node who is the management node
+    #   set_fact:
+    #     cuckoo_management_host: "{{ inventory_hostname }}"
+    #   delegate_to: "{{ item }}"
+    #   delegate_facts: True
+    #   with_items: "{{ ansible_play_batch }}"    
+    #   when: cuckoo_management_host is not defined
+    #   run_once: True
+      
+    # Install mysql and add a database
+    - include_role:
+        name: geerlingguy.mysql
+      vars:
+        mysql_enabled_on_startup: yes
+        mysql_databases:
+          - name: distributed
+    
+    - name: Inform distributed to use mysql
+      replace:
+        path: '{{ cuckoo_root }}/distributed/settings.py'
+        regexp: '^(SQLALCHEMY_DATABASE_URI).+$'
+        replace: '\1 = "mysql://root:root@localhost/distributed"'
+
+    # Set up nginx and uwsgi configuration for distributed cuckoo
+    - include: configure_nginx_uwsgi.yml command="distributed server -H 0" file="distributed"
+      
+    - meta: flush_handlers
+
+  when: cuckoo_management_node
+  
+- block:
+
+  # Install mysql database on every node
+  # By default, cuckoo uses sqlite which is not suited for cuckoo distributed
+  - include_role:
+      name: geerlingguy.mysql
+    vars:
+      mysql_enabled_on_startup: yes
+      mysql_databases:
+        - name: cuckoo
+    become: yes
+    become_method: sudo
+  
+  - name: Inform cuckoo to use mysql
+    become: True
+    ini_file:
+      dest: '{{ cuckoo_root }}/conf/cuckoo.conf'
+      section: 'database'
+      option: 'connection'
+      value: 'mysql://root:root@localhost/cuckoo'
+    notify: restart cuckoo
+
+  - meta: flush_handlers    
+    
+  - name: Wait for distributed cuckoo to start
+    wait_for:
+      port: 9003
+      connect_timeout: 10
+    delegate_to: "{{ cuckoo_management_host }}"
+    delegate_facts: True
+    
+  - name: Add nodes to cuckoo distributed 
+    uri:
+      url: "http://localhost:9003/api/node"
+      method: POST
+      body: "name={{ inventory_hostname }}=&url=http://{{ ansible_default_ipv4.address }}:8090/"
+      return_content: True
+    register: result
+    failed_when: not result.json.success and result.json.message != "There is already a node with this name"
+    delegate_to: "{{ cuckoo_management_host }}"
+    
+  when: cuckoo_worker_node

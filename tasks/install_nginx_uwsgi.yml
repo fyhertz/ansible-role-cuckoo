@@ -1,0 +1,21 @@
+---
+
+# Install nginx if needed
+- block:
+    - include_role:
+        name: geerlingguy.nginx
+      vars:
+        nginx_remove_default_vhost: true
+    - user: name='www-data' groups=cuckoo append=yes
+  become: yes
+  become_method: sudo
+
+# Install uwsgi if needed
+- name: Install uwsgi
+  become: yes
+  become_method: sudo
+  package:
+    name:
+      - uwsgi-plugin-python
+      - uwsgi
+    state: latest

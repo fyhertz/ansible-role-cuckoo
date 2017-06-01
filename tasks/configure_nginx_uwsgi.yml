@@ -1,0 +1,37 @@
+---
+
+- name: Generate Cuckoo Sandbox uWSGI configuration
+  command: "/usr/local/bin/cuckoo {{ command }} --uwsgi"
+  become: yes
+  become_user: cuckoo
+  register: cuckoo_tmp
+
+- name: Install Cuckoo Sandbox uWSGI configuration  
+  copy: content="{{ cuckoo_tmp.stdout }}" dest="/etc/uwsgi/apps-available/cuckoo-{{ file }}.ini" owner=root group=root mode=0644
+  become: yes
+  become_method: sudo
+  notify: restart uwsgi
+  
+- name: Enable Cuckoo Sandbox uWSGI Configuration
+  become: yes
+  become_method: sudo
+  file: src="/etc/uwsgi/apps-available/cuckoo-{{ file }}.ini" dest="/etc/uwsgi/apps-enabled/cuckoo-{{ file }}.ini" state=link
+  notify: restart uwsgi
+
+- name: Generate Cuckoo Sandbox NGINX Configuration
+  command: "/usr/local/bin/cuckoo {{ command }} --nginx"
+  become: yes
+  become_user: cuckoo
+  register: cuckoo_tmp
+
+- name: Install Cuckoo Sandbox NGINX Configuration
+  copy: content="{{ cuckoo_tmp.stdout }}" dest="/etc/nginx/sites-available/cuckoo-{{ file }}.conf" owner=root group=root mode=0644
+  become: yes
+  become_method: sudo
+  notify: restart nginx
+
+- name: Enable Cuckoo Sandbox NGINX Configuration
+  become: yes
+  become_method: sudo
+  file: src="/etc/nginx/sites-available/cuckoo-{{ file }}.conf" dest="/etc/nginx/sites-enabled/cuckoo-{{ file }}.conf" state=link
+  notify: restart nginx
