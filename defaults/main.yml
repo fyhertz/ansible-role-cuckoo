@@ -12,8 +12,13 @@ cuckoo_enable_web_interface: True
 
 cuckoo_enable_api: True
 
-# Not tested
 cuckoo_enable_distributed: False
+
+cuckoo_management_host: Null
+
+cuckoo_management_node: False
+
+cuckoo_worker_node: True
 
 # Path to the CWD
 cuckoo_root: "/home/cuckoo/.cuckoo"

@@ -1,5 +1,15 @@
 ---
 
+- name: Enable Mongo database (Required for the web interface)
+  become: True
+  ini_file:
+    dest: '{{ cuckoo_root }}/conf/reporting.conf'
+    section: 'mongodb'
+    option: 'enabled'
+    value: 'yes'
+  notify: restart cuckoo
+  when: cuckoo_enable_web_interface
+  
 - name: Set cuckoo machinery
   become: True
   ini_file:
@@ -8,7 +18,6 @@
     option: 'machinery'
     value: '{{ cuckoo_machinery }}'
   notify: restart cuckoo
-
 
 # Get ip address of the interface specified in the variable cuckoo_interface
 # This ip will be used for the resultserver ip field in cuckoo.conf
@@ -30,4 +39,7 @@
     option: 'ip'
     value: '{{ cuckoo_interface_ip }}'
   notify: restart cuckoo
-  
+
+- name: Install Cuckoo systemd service
+  template: src=cuckoo.service.j2 dest=/etc/systemd/system/cuckoo.service owner=root group=root mode=0644
+  notify: restart cuckoo

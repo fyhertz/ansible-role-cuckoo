@@ -1,14 +1,5 @@
 ---
 
-- name: Enable Mongo database (Required for the web interface)
-  become: True
-  ini_file:
-    dest: '{{ cuckoo_root }}/conf/reporting.conf'
-    section: 'mongodb'
-    option: 'enabled'
-    value: 'yes'
-  notify: restart cuckoo
-
 - name: Generate Cuckoo Sandbox web uWSGI configuration
   command: /usr/local/bin/cuckoo web --uwsgi
   become: yes

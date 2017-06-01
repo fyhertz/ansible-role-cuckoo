@@ -4,65 +4,46 @@
 - include: install_cuckoo.yml
   become: True
   tags: ['role::cuckoo::install']
-  
-# Download, build and install yara from sources
-- include: install_yara.yml
-  when: cuckoo_enable_yara
+
+# Install nginx and uwsgi if needed
+- include: install_nginx_uwsgi.yml
+  when: cuckoo_enable_web_interface or cuckoo_enable_api or cuckoo_enable_distributed or cuckoo_management_node
   tags: ['role::cuckoo::install']
   
-# Download and install volatility
-- include: install_volatility.yml
-  when: cuckoo_enable_volatility
-  tags: ['role::cuckoo::install','role::cuckoo::volatility']
-
-# Install nginx if needed
 - block:
-    - include_role:
-        name: geerlingguy.nginx
-      vars:
-        nginx_remove_default_vhost: true
-    - user: name='www-data' groups=cuckoo append=yes
-      notify: reload nginx
-  become: yes
-  become_method: sudo
-  when: cuckoo_enable_web_interface or cuckoo_enable_api
-  tags: ['role::cuckoo::install']
-
-# Install uwsgi if needed
-- name: Install uwsgi
-  become: yes
-  become_method: sudo
-  package:
-    name:
-      - uwsgi-plugin-python
-      - uwsgi
-    state: latest
-  when: cuckoo_enable_web_interface or cuckoo_enable_api
-  tags: ['role::cuckoo::install']
   
-# Enable cuckoo web API through nginx web server
-- include: configure_api.yml
-  tags: ['role::cuckoo::configure','role::cuckoo::api']
-
-# Enable cuckoo web interface 
-- include: configure_web.yml
-  when: cuckoo_enable_web_interface
-  tags: ['role::cuckoo::configure','role::cuckoo::web']
+  # Download, build and install yara from sources
+  - include: install_yara.yml
+    when: cuckoo_enable_yara
+    tags: ['role::cuckoo::install']
   
-# Update the binaries used for Windows analysis
-# - include: update_binaries.yml
-#   tags: ['role::cuckoo::install','role::cuckoo::update_binaries']
+  # Download and install volatility
+  - include: install_volatility.yml
+    when: cuckoo_enable_volatility
+    tags: ['role::cuckoo::install','role::cuckoo::volatility']
+  
+  # Set up cuckoo REST API
+  - include: configure_nginx_uwsgi.yml command="api -H 0" file=api
+    when: cuckoo_enable_api or cuckoo_enable_distributed
+    tags: ['role::cuckoo::configure','role::cuckoo::api']
+  
+  # Set up cuckoo web interface
+  - include: configure_nginx_uwsgi.yml command="web" file=web
+    when: cuckoo_enable_web_interface
+    tags: ['role::cuckoo::configure','role::cuckoo::web']
+  
+  # If machinary==kvm, install libvirt
+  - include: configure_kvm.yml
+    when: cuckoo_machinery=="kvm"
+    tags: ['role::cuckoo::configure', 'role::cuckoo::kvm']
 
-# Makes the necessary changes in cuckoo nodes for cuckoo distributed
-- include: configure_ditributed.yml
+  # Configure cuckoo
+  - include: configure_cuckoo.yml
+    tags: ['role::cuckoo::configure']
+
+  when: cuckoo_worker_node
+
+# Set up cuckoo distributed
+- include: configure_distributed.yml
   when: cuckoo_enable_distributed
   tags: ['role::cuckoo::configure', 'role::cuckoo::distributed']
-  
-# If machinary==kvm, generate kvm.conf and start cuckoo
-- include: configure_kvm.yml
-  when: cuckoo_machinery=="kvm"
-  tags: ['role::cuckoo::configure', 'role::cuckoo::kvm']
-
-# Configure cuckoo
-- include: configure_cuckoo.yml
-  tags: ['role::cuckoo::configure']

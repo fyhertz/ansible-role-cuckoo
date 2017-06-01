@@ -40,7 +40,3 @@
   when: cuckoo_stat_result.stat.exists == False
   become: yes
   become_user: cuckoo
-  
-- name: Install Cuckoo systemd service
-  template: src=cuckoo.service.j2 dest=/etc/systemd/system/cuckoo.service owner=root group=root mode=0644
-  notify: restart cuckoo
