@@ -41,6 +41,11 @@
   - include: configure_cuckoo.yml
     tags: ['role::cuckoo::configure']
 
+  # Configure cuckoo rooter
+  - include: configure_rooter.yml
+    tags: ['role::cuckoo::configure', 'role::cuckoo::rooter']
+    when: cuckoo_enable_rooter
+    
   when: cuckoo_worker_node
 
 # Set up cuckoo distributed

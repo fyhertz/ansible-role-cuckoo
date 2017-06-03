@@ -14,6 +14,8 @@ cuckoo_enable_api: True
 
 cuckoo_enable_distributed: False
 
+cuckoo_enable_rooter: False
+
 cuckoo_management_host: Null
 
 cuckoo_management_node: False

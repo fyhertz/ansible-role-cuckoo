@@ -1,5 +1,5 @@
 [Unit]
-Description=Main Cuckoo service wrapper
+Description=Cuckoo service wrapper
 After=network.target mongod.service{% if cuckoo_enable_distributed %} mysql.service{% endif %}{% if cuckoo_machinery=='kvm' %} libvirtd.service{% endif %}
 
 [Service]
