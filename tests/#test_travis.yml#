@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - role: ansible-role-cuckoo
+      cuckoo_enable_yara: False
+      

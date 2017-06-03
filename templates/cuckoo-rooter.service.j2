@@ -1,0 +1,12 @@
+[Unit]
+Description=Cuckoo Rooter service wrapper
+After=network.target
+
+[Service]
+User=cuckoo
+Group=cuckoo
+ExecStart=/usr/local/bin/cuckoo rooter
+WorkingDirectory={{ cuckoo_root }}
+
+[Install]
+WantedBy=multi-user.target
