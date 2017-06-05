@@ -3,8 +3,8 @@ Description=Cuckoo Rooter service wrapper
 After=network.target
 
 [Service]
-User=cuckoo
-Group=cuckoo
+User=root
+Group=root
 ExecStart=/usr/local/bin/cuckoo rooter
 WorkingDirectory={{ cuckoo_root }}
 
