@@ -5,6 +5,11 @@
   become_method: sudo
   service: name=cuckoo state=restarted enabled=yes
 
+- name: start cuckoo-rooter
+  become: yes
+  become_method: sudo
+  service: name=cuckoo-rooter state=started enabled=yes  
+  
 - name: restart uwsgi
   become: yes
   become_method: sudo

@@ -2,4 +2,5 @@
 
 - name: Install Cuckoo Rooter systemd service
   template: src=cuckoo-rooter.service.j2 dest=/etc/systemd/system/cuckoo-rooter.service owner=root group=root mode=0644
+  notify: start cuckoo-rooter
   become: True

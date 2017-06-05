@@ -43,8 +43,8 @@
 
   # Configure cuckoo rooter
   - include: configure_rooter.yml
-    tags: ['role::cuckoo::configure', 'role::cuckoo::rooter']
     when: cuckoo_enable_rooter
+    tags: ['role::cuckoo::configure', 'role::cuckoo::rooter']
     
   when: cuckoo_worker_node
 
