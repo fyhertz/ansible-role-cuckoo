@@ -40,7 +40,8 @@ cuckoo_apt_requirements:
   - libjpeg-dev
   - tcpdump
   - libcap2-bin
-  
+  - apparmor-utils
+
 yara_version: "3.3.0"
 yara_apt_requirements:
   - libpcre3
