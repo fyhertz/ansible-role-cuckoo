@@ -2,7 +2,7 @@
 
 - name: Update Windows binaries
   become: True
-  shell: "{{ cuckoo_root }}/utils/community.py -wafb monitor"
+  shell: "{{ cuckoo_cwd }}/utils/community.py -wafb monitor"
   register: command_result
   failed_when: "'Traceback' in command_result.stderr" # Some python exception occured
   notify: restart cuckoo

@@ -23,7 +23,7 @@ cuckoo_management_node: False
 cuckoo_worker_node: True
 
 # Path to the CWD
-cuckoo_root: "/home/cuckoo/.cuckoo"
+cuckoo_cwd: "/home/cuckoo/.cuckoo"
 
 cuckoo_version: "2.0-rc2"
 cuckoo_apt_requirements:

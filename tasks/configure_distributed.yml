@@ -23,7 +23,7 @@
     
     - name: Inform distributed to use mysql
       replace:
-        path: '{{ cuckoo_root }}/distributed/settings.py'
+        path: '{{ cuckoo_cwd }}/distributed/settings.py'
         regexp: '^(SQLALCHEMY_DATABASE_URI).+$'
         replace: '\1 = "mysql://root:root@localhost/distributed"'
 
@@ -55,7 +55,7 @@
   - name: Inform cuckoo to use mysql
     become: True
     ini_file:
-      dest: '{{ cuckoo_root }}/conf/cuckoo.conf'
+      dest: '{{ cuckoo_cwd }}/conf/cuckoo.conf'
       section: 'database'
       option: 'connection'
       value: 'mysql://root:root@localhost/cuckoo'

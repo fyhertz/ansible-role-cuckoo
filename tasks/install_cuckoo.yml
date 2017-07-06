@@ -29,10 +29,10 @@
   command: setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
 
 - name: Give proper permissions
-  file: path={{ cuckoo_root }} state=directory recurse=yes owner=cuckoo group=cuckoo
+  file: path={{ cuckoo_cwd }} state=directory recurse=yes owner=cuckoo group=cuckoo
 
 - name: Check if the CWD already exists
-  stat: path={{ cuckoo_root }}/conf
+  stat: path={{ cuckoo_cwd }}/conf
   register: cuckoo_stat_result
   
 - name: Create cuckoo CWD

@@ -6,7 +6,7 @@ After=network.target mongod.service{% if cuckoo_enable_distributed %} mysql.serv
 User=cuckoo
 Group=cuckoo
 ExecStart=/usr/local/bin/cuckoo --debug
-WorkingDirectory={{ cuckoo_root }}
+WorkingDirectory={{ cuckoo_cwd }}
 
 [Install]
 WantedBy=multi-user.target

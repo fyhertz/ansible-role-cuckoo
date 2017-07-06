@@ -48,7 +48,7 @@
 - name: Set network interface used by tcpdump
   become: True
   ini_file:
-    dest: '{{ cuckoo_root }}/conf/kvm.conf'
+    dest: '{{ cuckoo_cwd }}/conf/kvm.conf'
     section: 'kvm'
     option: 'interface'
     value: '{{ cuckoo_interface }}'

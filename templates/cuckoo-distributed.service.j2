@@ -6,7 +6,7 @@ After=network.target mysql.service
 User=cuckoo
 Group=cuckoo
 ExecStart=/usr/bin/python -m cuckoo.distributed.worker
-WorkingDirectory={{ cuckoo_root }}
+WorkingDirectory={{ cuckoo_cwd }}
 Environment="CUCKOO_APP=worker"
 
 [Install]

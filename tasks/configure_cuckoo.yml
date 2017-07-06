@@ -3,7 +3,7 @@
 - name: Enable Mongo database (Required for the web interface)
   become: True
   ini_file:
-    dest: '{{ cuckoo_root }}/conf/reporting.conf'
+    dest: '{{ cuckoo_cwd }}/conf/reporting.conf'
     section: 'mongodb'
     option: 'enabled'
     value: 'yes'
@@ -13,7 +13,7 @@
 - name: Set cuckoo machinery
   become: True
   ini_file:
-    dest: '{{ cuckoo_root }}/conf/cuckoo.conf'
+    dest: '{{ cuckoo_cwd }}/conf/cuckoo.conf'
     section: 'cuckoo'
     option: 'machinery'
     value: '{{ cuckoo_machinery }}'
@@ -34,7 +34,7 @@
 - name: Set resultserver ip field in cuckoo.conf
   become: True
   ini_file:
-    dest: '{{ cuckoo_root }}/conf/cuckoo.conf'
+    dest: '{{ cuckoo_cwd }}/conf/cuckoo.conf'
     section: 'resultserver'
     option: 'ip'
     value: '{{ cuckoo_interface_ip }}'
