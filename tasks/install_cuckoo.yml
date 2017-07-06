@@ -30,6 +30,7 @@
 
 - name: Disable AppArmor for tcpdump
   command: aa-disable /usr/sbin/tcpdump
+  failed_when: false
 
 - name: Give proper permissions
   file: path={{ cuckoo_cwd }} state=directory recurse=yes owner=cuckoo group=cuckoo
