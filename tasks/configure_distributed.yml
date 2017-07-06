@@ -29,6 +29,11 @@
 
     # Set up nginx and uwsgi configuration for distributed cuckoo
     - include: configure_nginx_uwsgi.yml command="distributed server -H 0" file="distributed"
+
+    - name: Install Cuckoo Distributed systemd service
+      template: src=cuckoo-distributed.service.j2 dest=/etc/systemd/system/cuckoo-distributed.service owner=root group=root mode=0644
+      notify: start cuckoo-distributed
+      become: True
       
     - meta: flush_handlers
 

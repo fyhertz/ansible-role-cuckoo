@@ -1,0 +1,13 @@
+[Unit]
+Description=Cuckoo Distributed worker service wrapper
+After=network.target mysql.service
+
+[Service]
+User=cuckoo
+Group=cuckoo
+ExecStart=/usr/bin/python -m cuckoo.distributed.worker
+WorkingDirectory={{ cuckoo_root }}
+Environment="CUCKOO_APP=worker"
+
+[Install]
+WantedBy=multi-user.target
