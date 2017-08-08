@@ -16,11 +16,13 @@ cuckoo_enable_distributed: False
 
 cuckoo_enable_rooter: False
 
-cuckoo_management_host: Null
-
+# By default, nodes are worker nodes
+# i.e. running cuckoo and not running distributed
+cuckoo_worker_node: True
 cuckoo_management_node: False
 
-cuckoo_worker_node: True
+# Hostname of the node running distributed if needed
+cuckoo_management_host: Null
 
 # Path to the CWD
 cuckoo_cwd: "/home/cuckoo/.cuckoo"
