@@ -12,7 +12,11 @@
     #   with_items: "{{ ansible_play_batch }}"    
     #   when: cuckoo_management_host is not defined
     #   run_once: True
-      
+
+    - name: Install cuckoo distributed dependencies
+      pip:
+        name: cuckoo[distributed]
+
     # Install mysql and add a database
     - include_role:
         name: geerlingguy.mysql
