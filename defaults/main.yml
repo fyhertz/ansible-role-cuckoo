@@ -43,7 +43,6 @@ cuckoo_apt_requirements:
   - tcpdump
   - libcap2-bin
   - apparmor-utils
-  - libpq-dev
   
 yara_version: "3.3.0"
 yara_apt_requirements:
@@ -64,10 +63,8 @@ volatility_pip_requirements:
   - distorm3
   - pycrypto
 
-cuckoo_distributed_pip_requirements:
-  - flask
-  - flask-sqlalchemy
-  - requests
+cuckoo_distributed_apt_requirements:
+  - libpq-dev
   
 # pip_requirements: 
 #   - django-ratelimit

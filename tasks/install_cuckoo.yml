@@ -1,10 +1,16 @@
 ---
 
-- name: Install requirements from apt
+- name: Install requirements
   package:
     name: "{{ cuckoo_apt_requirements }}"
     state: latest
 
+- name: Install requirements for distributed
+  package:
+    name: "{{ cuckoo_distributed_apt_requirements }}"
+    state: latest
+  when: cuckoo_management_node
+    
 - name: Update pip
   command: pip install --upgrade pip
     
