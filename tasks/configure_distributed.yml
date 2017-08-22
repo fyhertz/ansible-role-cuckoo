@@ -39,7 +39,8 @@
       notify: start cuckoo-distributed
       become: True
       
-    - meta: flush_handlers
+    - name: Restarts services if needed
+      meta: flush_handlers
 
   when: cuckoo_management_node
   
