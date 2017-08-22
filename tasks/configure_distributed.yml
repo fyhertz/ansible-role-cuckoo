@@ -42,6 +42,14 @@
     - name: Restarts services if needed
       meta: flush_handlers
 
+    - name: Test if distributed is running correctly
+      block:
+        - uri: url="http://localhost:9003/api/node"
+      rescue:
+        - service: name=nginx state=restarted
+        - service: name=uwsgi state=restarted
+      
+      
   when: cuckoo_management_node
   
 - block:
