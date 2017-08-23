@@ -89,7 +89,7 @@
     uri:
       url: "http://localhost:9003/api/node"
       method: POST
-      body: "name={{ inventory_hostname }}=&url=http://{{ ansible_default_ipv4.address }}:8090/"
+      body: "name={{ inventory_hostname }}&url=http://{{ ansible_default_ipv4.address }}:8090/"
       return_content: True
     register: result
     failed_when: not result.json.success and result.json.message != "There is already a node with this name"
