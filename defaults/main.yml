@@ -1,5 +1,7 @@
 ---
 
+#cuckoo_version: '2.0.3'
+
 cuckoo_machinery: 'kvm'
 
 cuckoo_interface: 'virbr0'

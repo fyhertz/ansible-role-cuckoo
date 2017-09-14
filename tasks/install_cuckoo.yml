@@ -20,9 +20,11 @@
 - name: Create cuckoo user
   user: name=cuckoo groups=cuckoo
 
+- name: Install setuptools from pip
+  pip: name=setuptools
+  
 - name: Install cuckoo from pip
-  pip:
-    name: setuptools cuckoo
+  pip: name=cuckoo version={{ cuckoo_version | d(omit) }}
 
 - name: Install setfacl support
   package: name=acl
